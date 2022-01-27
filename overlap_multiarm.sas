@@ -1,6 +1,6 @@
-*************************************************************************************
-This macro condcuts a three arm overlap weight cox surival regression.
-The code may be extended for more arms as desired
+/*************************************************************************************
+This macro condcuts a three arm overlap weight cox survival regression.
+The code may be used as a base and extended for more arms as desired.
 
 It takes as intput:
 A)dataset- contains the cohort groups (GROUP1 GROUP2 GROUP3), unique id (id),
@@ -12,12 +12,9 @@ C)outcome- This contains the date of the outcome
 D)pssrez- storage of weights for covariate balance evaluation
 E)hrrz-storage of hazard ratios
 F)surrez-storage of survial probability estimates
-G)hdps- dataset with high dimeisonal covariates in long form 
-H)pre- dataset with predefined covariates in long form
-
-
-
-;
+G)hdps- dataset with high dimeisonal covariate names in long form 
+H)pre- dataset with predefined covariates names in long form
+*************************************************************************************/
 
 
 %macro disease(history, outcome, dataset, hdps, pre, psrez, hrrez, surrez);
@@ -112,17 +109,17 @@ model time*event(0)=group;
 hazardratio group/diff=pairwise;
 weight ps_&outcome;
 id id;
-baseline out=sur covariates=baseline survival=sur upper=suru lower=surl;
+baseline out=sur_out covariates=baseline survival=sur upper=suru lower=surl;
 run;
 
 
 data hr;
-set hr;
+set hr_out;
 outcome="&outcome";
 run;
 
 data sur;
-set sur;
+set sur_out;
 outcome="&outcome";
 run;
 
