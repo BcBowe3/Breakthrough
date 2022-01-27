@@ -1,5 +1,5 @@
-*************************************************************************************
-This macro condcuts a two arm overlap weight cox surival regression.
+/*************************************************************************************
+This macro condcuts a two arm overlap weight cox survival regression.
 It takes as intput:
 A)dataset- contains the cohort groups (BREAK and REF), unique id (id),
 	covariates, outcome date, outcome history, 
@@ -12,12 +12,7 @@ E)hrrz-storage of hazard ratios
 F)surrez-storage of survial probability estimates
 G)hdps- dataset with high dimeisonal covariates in long form 
 H)pre- dataset with predefined covariates in long form
-
-
-
-;
-
-
+*************************************************************************************/
 %macro disease(history, outcome, dataset, hdps, pre, psrez, hrrez, surrez);
 /*Initializes a dataset for surival probalibty estimation*/
 data baseline;
@@ -64,6 +59,7 @@ data &psrez ;
 set ;
 if group="REF" then ps_&outcome=ps;
 if group="BREAK" then  ps_&outcome=(1-ps);
+drop ps;
 run;
 
 data outcome;
@@ -86,17 +82,17 @@ model time*event(0)=group;
 hazardratio group/diff=pairwise;
 weight ps_&outcome;
 id id;
-baseline out=sur covariates=baseline survival=sur upper=suru lower=surl;
+baseline out=sur_out covariates=baseline survival=sur upper=suru lower=surl;
 run;
 
 
 data hr;
-set hr;
+set hr_out;
 outcome="&outcome";
 run;
 
 data sur;
-set sur;
+set sur_out;
 outcome="&outcome";
 run;
 
