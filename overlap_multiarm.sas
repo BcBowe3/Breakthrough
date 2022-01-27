@@ -86,6 +86,7 @@ base=(1/PS_1 + 1/PS_2 + 1/PS_3)
 if group="GROUP1" then ps_&outcome=(1/PS_1)/base;
 if group="GROUP2" then ps_&outcome=(1/PS_2)/base;
 if group="GROUP3" then ps_&outcome=(1/PS_3)/base;
+drop base ps_1 ps_2 PS_3;
 run;
 
 
