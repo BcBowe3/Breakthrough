@@ -1,24 +1,24 @@
 /*************************************************************************************
-This macro condcuts a three arm overlap weight cox survival regression.
+This macro conducts a three arm overlap weight cox survival regression.
 The code may be used as a base and extended for more arms as desired.
 
-It takes as intput:
+It takes as input:
 A)dataset- contains the cohort groups (GROUP1 GROUP2 GROUP3), unique id (id),
 	covariates, outcome date, outcome history, 
-	end of followup date (endoffolow), and the start of followup date (t0)
+	end of followup date (endoffollow), and the start of followup date (t0)
 B)history- An indicator of prior history of the disease being examined
 	Used to exclude those with the disease. May be set to 1 or a date
 C)outcome- This contains the date of the outcome
-D)pssrez- storage of weights for covariate balance evaluation
-E)hrrz-storage of hazard ratios
-F)surrez-storage of survial probability estimates
-G)hdps- dataset with high dimeisonal covariate names in long form 
+D)psrez- storage of weights for covariate balance evaluation
+E)hrrez- storage of hazard ratios
+F)surrez- storage of survival probability estimates
+G)hdps- dataset with high dimensional covariate names in long form 
 H)pre- dataset with predefined covariates names in long form
 *************************************************************************************/
 
 
 %macro disease(history, outcome, dataset, hdps, pre, psrez, hrrez, surrez);
-/*Initializes a dataset for surival probalibty estimation*/
+/*Initializes a dataset for survival probability estimation*/
 data baseline;
 length group $16.;
 event=0; time=180;
@@ -27,7 +27,7 @@ group="GROUP2";output;
 group="GROUP3";output;
 run;
 
-/*High dimeisonal covariates*/
+/*High dimensional covariates*/
 data eee;
 set &hdps;
 length cov $32767.;
@@ -36,7 +36,7 @@ cov=catx(' ',cov,_name_);
 call symput('hdvs',cov);
 run;
 
-/*predefind covariates*/
+/*predefined covariates*/
 data eee;
 set &pre;
 length cov $32767.;
@@ -139,7 +139,7 @@ data  HR;
 length outcome $50;
 set _null_;
 run;
-*Storage for survival probability estiamtes;
+*Storage for survival probability estimates;
 data  SUR;
 length outcome $50;
 set _null_;
@@ -149,4 +149,4 @@ data  PS;
 set cohort (keep=id);
 run;
 
-%disease (history,outcome,dataset, hdps, pre, PS, HR,SUR);
+%disease (history, outcome, dataset, hdps, pre, PS, HR,SUR);
